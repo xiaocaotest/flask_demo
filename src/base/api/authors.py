@@ -44,34 +44,22 @@ def get_author_detail(author_id):
 @author_routes.route('/<int:id>', methods=['PUT'])
 def update_author_detail(id):
     data = request.get_json()
-    get_author = Author.query.get_or_404(id)
-    get_author.first_name = data['first_name']
-    get_author.last_name = data['last_name']
-    db.session.add(get_author)
-    db.session.commit()
+    author = Author(**data).put(id)
     author_schema = AuthorSchema()
-    author = author_schema.dump(get_author)
+    author = author_schema.dump(author)
     return response_with(resp.SUCCESS_200, value={"author": author})
 
 
 @author_routes.route('/<int:id>', methods=['PATCH'])
 def modify_author_detail(id):
     data = request.get_json()
-    get_author = Author.query.get(id)
-    if data.get('first_name'):
-        get_author.first_name = data['first_name']
-    if data.get('last_name'):
-        get_author.last_name = data['last_name']
-    db.session.add(get_author)
-    db.session.commit()
+    author = Author(**data).patch(id)
     author_schema = AuthorSchema()
-    author = author_schema.dump(get_author)
+    author = author_schema.dump(author)
     return response_with(resp.SUCCESS_200, value={"author": author})
 
 
 @author_routes.route('/<int:id>', methods=['DELETE'])
 def delete_author(id):
-    get_author = Author.query.get_or_404(id)
-    db.session.delete(get_author)
-    db.session.commit()
+    Author().delete(id)
     return response_with(resp.SUCCESS_204)
