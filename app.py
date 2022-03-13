@@ -7,8 +7,10 @@ from flask import Flask
 from src.base.config.config import *
 from src.base.utils.database import db
 import src.base.utils.responses as resp
-from src.base.api.authors import author_routes
+from flask_jwt_extended import JWTManager
 from src.base.api.books import book_routes
+from src.base.api.users import user_routes
+from src.base.api.authors import author_routes
 from src.base.utils.responses import response_with
 
 
@@ -22,8 +24,9 @@ else:
 app = Flask(__name__)
 app.config.from_object(app_config)
 
-app.register_blueprint(author_routes, url_prefix='/api/authors')
 app.register_blueprint(book_routes, url_prefix='/api/books')
+app.register_blueprint(user_routes, url_prefix='/api/users')
+app.register_blueprint(author_routes, url_prefix='/api/authors')
 
 
 @app.after_request
@@ -48,6 +51,8 @@ def not_found(e):
     logging.error(e)
     return response_with(resp.SERVER_ERROR_404)
 
+
+jwt = JWTManager(app)
 
 db.init_app(app)
 

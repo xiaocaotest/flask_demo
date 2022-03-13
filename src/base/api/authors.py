@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask import request
+from flask_jwt_extended import jwt_required
 
 from src.base.utils.responses import response_with
 from src.base.utils import responses as resp
@@ -9,6 +10,7 @@ author_routes = Blueprint("author_routes", __name__)
 
 
 @author_routes.route('/', methods=['POST'])
+@jwt_required()
 def create_author():
     try:
         json = request.get_json()

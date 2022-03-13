@@ -51,6 +51,18 @@ SUCCESS_204 = {
     'code': 'success'
     }
 
+FORBIDDEN_403 = {
+    "http_code": 403,
+    "code": "notAuthorized",
+    "message": "You are not authorised to execute this."
+}
+
+UNAUTHORIZED_401 = {
+    "http_code": 401,
+    "code": "notAuthorized",
+    "message": "Invalid authentication."
+}
+
 
 def response_with(response, value=None, message=None,
                   error=None, headers=None, pagination=None):

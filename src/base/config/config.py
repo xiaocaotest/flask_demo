@@ -2,6 +2,7 @@
 class Config:
     DEBUG = False
     TESTING = False
+    JWT_SECRET_KEY = 'SOME-RADOM-JWT-SECRET'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

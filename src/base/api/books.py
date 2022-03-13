@@ -1,4 +1,6 @@
 from flask import Blueprint, request
+from flask_jwt_extended import jwt_required
+
 from src.base.utils.responses import response_with
 from src.base.utils import responses as resp
 from src.base.models.books import Book, BookSchema
