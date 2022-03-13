@@ -2,7 +2,6 @@ from flask import Blueprint, request
 from src.base.utils.responses import response_with
 from src.base.utils import responses as resp
 from src.base.models.books import Book, BookSchema
-from src.base.utils.database import db
 
 book_routes = Blueprint("book_routes", __name__)
 
@@ -12,10 +11,10 @@ def create_book():
     try:
         data = request.get_json()
         book_schema = BookSchema()
-        book = book_schema.load(data)
-        result = book_schema.dump(book.create())
-        return response_with(resp.SUCCESS_201, value={"book":
-                                                          result})
+        data = book_schema.load(data)
+        book = Book(**data).create()
+        result = book_schema.dump(book)
+        return response_with(resp.SUCCESS_201, value={"book": result})
     except Exception as e:
         print(e)
     return response_with(resp.INVALID_INPUT_422)
@@ -40,11 +39,7 @@ def get_book_detail(id):
 @book_routes.route('/<int:id>', methods=['PUT'])
 def update_book_detail(id):
     data = request.get_json()
-    get_book = Book.query.get_or_404(id)
-    get_book.title = data['title']
-    get_book.year = data['year']
-    db.session.add(get_book)
-    db.session.commit()
+    get_book = Book(**data).put(id)
     book_schema = BookSchema()
     book = book_schema.dump(get_book)
     return response_with(resp.SUCCESS_200, value={"book": book})
@@ -53,13 +48,7 @@ def update_book_detail(id):
 @book_routes.route('/<int:id>', methods=['PATCH'])
 def modify_book_detail(id):
     data = request.get_json()
-    get_book = Book.query.get_or_404(id)
-    if data.get('title'):
-        get_book.title = data['title']
-    if data.get('year'):
-        get_book.year = data['year']
-    db.session.add(get_book)
-    db.session.commit()
+    get_book = Book(**data).patch(id)
     book_schema = BookSchema()
     book = book_schema.dump(get_book)
     return response_with(resp.SUCCESS_200, value={"book": book})
@@ -67,7 +56,5 @@ def modify_book_detail(id):
 
 @book_routes.route('/<int:id>', methods=['DELETE'])
 def delete_book(id):
-    get_book = Book.query.get_or_404(id)
-    db.session.delete(get_book)
-    db.session.commit()
+    Book().delete(id)
     return response_with(resp.SUCCESS_204)

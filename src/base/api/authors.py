@@ -4,7 +4,6 @@ from flask import request
 from src.base.utils.responses import response_with
 from src.base.utils import responses as resp
 from src.base.models.authors import Author, AuthorSchema
-from src.base.utils.database import db
 
 author_routes = Blueprint("author_routes", __name__)
 

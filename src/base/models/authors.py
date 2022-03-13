@@ -39,11 +39,13 @@ class Author(db.Model):
             get_author.last_name = self.last_name
         db.session.add(get_author)
         db.session.commit()
+        return self
 
     def delete(self, id):
         get_author = Author.query.get_or_404(id)
         db.session.delete(get_author)
         db.session.commit()
+        return self
 
 
 class AuthorSchema(Schema):

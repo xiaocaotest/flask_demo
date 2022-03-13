@@ -10,7 +10,7 @@ class Book(db.Model):
     year = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey('authors.id'))
 
-    def __init__(self, title, year, author_id=None):
+    def __init__(self, title=None, year=None, author_id=None):
         self.title = title
         self.year = year
         self.author_id = author_id
@@ -19,6 +19,29 @@ class Book(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+
+    def put(self, id):
+        get_book = Book.query.get_or_404(id)
+        get_book.title = self.title
+        get_book.year = self.year
+        db.session.add(get_book)
+        db.session.commit()
+        return self
+
+    def patch(self, id):
+        get_book = Book.query.get_or_404(id)
+        if self.title:
+            get_book.title = self.title
+        if self.year:
+            get_book.year = self.year
+        db.session.add(get_book)
+        db.session.commit()
+        return self
+
+    def delete(self, id):
+        get_book = Book.query.get_or_404(id)
+        db.session.delete(get_book)
+        db.session.commit()
 
 
 class BookSchema(Schema):
