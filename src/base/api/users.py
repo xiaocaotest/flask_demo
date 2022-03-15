@@ -1,10 +1,11 @@
 from flask import Blueprint
 from flask import request
-from flask import url_for, render_template_string
+from flask_jwt_extended import create_access_token
+
 from src.base.utils.responses import response_with
 from src.base.utils import responses as resp
 from src.base.models.users import User, UserSchema
-from flask_jwt_extended import create_access_token
+
 
 user_routes = Blueprint("user_routes", __name__)
 
